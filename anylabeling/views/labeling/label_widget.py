@@ -2477,12 +2477,36 @@ class LabelmeWidget(LabelDialog):
             return
 
         # Ask a label for the object
-        previous_text = self.label_dialog.edit.text()
-        text, flags, group_id = self.label_dialog.pop_up(
-            text=self.find_last_label(),
-            flags={},
-            group_id=None,
-        )
+        # previous_text = self.label_dialog.edit.text()
+        # print(previous_text)
+        # text, flags, group_id = self.label_dialog.pop_up(
+        #     text=self.find_last_label(),
+        #     flags={},
+        #     group_id=None,
+        # )
+
+        items = self.unique_label_list.selectedItems()
+        text = None
+        if items:
+            text = items[0].data(Qt.UserRole)
+        flags = {}
+        group_id = None
+
+        if self.canvas.shapes[-1].label in [
+            AutoLabelingMode.ADD,
+            AutoLabelingMode.REMOVE,
+        ]:
+            text = self.canvas.shapes[-1].label
+        elif self._config["display_label_popup"] or not text:
+            previous_text = self.label_dialog.edit.text()
+            text, flags, group_id = self.label_dialog.pop_up(text)
+            if not text:
+                self.label_dialog.edit.setText(previous_text)
+  
+        # text = "core block"
+        # flags = {}
+        # group_id = None
+
         if not text:
             self.label_dialog.edit.setText(previous_text)
 
