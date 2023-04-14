@@ -35,7 +35,13 @@ conda activate anylabeling
 conda install -c conda-forge pyqt==5.15.7
 ```
 
-- Install anylabeling:
+- Install anylabeling from this repo when cloned locally
+
+```
+pip install -e .
+```
+
+- Install anylabeling from the original source:
 
 ```
 pip install anylabeling
