@@ -1,10 +1,7 @@
-# -*- mode: python -*-
-# vim: ft=python
-
-import sys
+# -*- mode: python ; coding: utf-8 -*-
 
 
-sys.setrecursionlimit(5000)  # required on Windows
+block_cipher = None
 
 
 a = Analysis(
@@ -12,33 +9,53 @@ a = Analysis(
     pathex=['anylabeling'],
     binaries=[],
     datas=[
-       ('anylabeling/configs/*', 'anylabeling/views/labeling/config'),
-       ('anylabeling/views/labeling/icons/*', 'anylabeling/views/labeling/icons'),
+       ('anylabeling/configs', 'configs'),
+       ('anylabeling/views', 'views'),
+       ('anylabeling/resources', 'resources'),
+       ('anylabeling/services', 'services')
     ],
     hiddenimports=[],
     hookspath=[],
+    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data)
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
 exe = EXE(
     pyz,
     a.scripts,
+    [],
+    exclude_binaries=True,
+    name='anylabeling',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity="anylabeling_app",
+    entitlements_file=None,
+)
+coll = COLLECT(
+    exe,
     a.binaries,
     a.zipfiles,
     a.datas,
-    name='anylabeling',
-    debug=False,
     strip=False,
-    upx=False,
-    runtime_tmpdir=None,
-    console=False,
-    #icon='anylabeling/icons/icon.ico',
+    upx=True,
+    upx_exclude=[],
+    name='anylabeling',
 )
 app = BUNDLE(
-    exe,
+    coll,
     name='anylabeling.app',
-    #icon='anylabeling/icons/icon.icns',
+    icon=None,
     bundle_identifier=None,
-    info_plist={'NSHighResolutionCapable': 'True'},
 )
